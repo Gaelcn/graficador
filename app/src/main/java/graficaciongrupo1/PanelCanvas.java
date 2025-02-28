@@ -26,7 +26,6 @@ public class PanelCanvas implements ApplicationListener {
 
     public PanelCanvas() {
         listaFiguras = new DefaultListModel<>();
-        System.out.println("mianbibsubi");
     }
     
     @Override
