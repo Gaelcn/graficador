@@ -8,6 +8,17 @@ import com.badlogic.gdx.backends.lwjgl.LwjglAWTCanvas;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.formdev.flatlaf.FlatDarculaLaf;
 import com.google.common.primitives.Floats;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.prefs.Preferences;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -23,11 +34,19 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     Figura figuraSelecionada =  null;
     Punto puntoSelecionado = null;
     
+    Preferences prefs;
+    
+    File ultimo_archivo_usado;
+    
     /**
      * Creates new form VentanaPrincipal
      */
     public VentanaPrincipal() {
         initComponents();
+        
+        prefs = Preferences.systemNodeForPackage(this.getClass());
+        
+        ultimo_archivo_usado = new File(prefs.get("ULTIMA_RUTA_USADA", ""));
         
         System.out.println("Inicializado correctamente");
         
@@ -71,6 +90,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 }
             }
         });
+        
+        Cargar(ultimo_archivo_usado);
     }
 
     /**
@@ -112,6 +133,31 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jTextField4 = new javax.swing.JTextField();
         jButton7 = new javax.swing.JButton();
+        jPanel7 = new javax.swing.JPanel();
+        tabEscalado = new javax.swing.JTabbedPane();
+        jPanel6 = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        JtfTx = new javax.swing.JTextField();
+        JtfTy = new javax.swing.JTextField();
+        BtnTraslacion = new javax.swing.JButton();
+        jPanel8 = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
+        JtfSx = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        JtfSy = new javax.swing.JTextField();
+        BtnEscalado = new javax.swing.JButton();
+        jPanel9 = new javax.swing.JPanel();
+        jLabel9 = new javax.swing.JLabel();
+        JtfAngulo = new javax.swing.JTextField();
+        BtnAngulo = new javax.swing.JButton();
+        jPanel10 = new javax.swing.JPanel();
+        jLabel10 = new javax.swing.JLabel();
+        JtfShx = new javax.swing.JTextField();
+        JtfShy = new javax.swing.JTextField();
+        jLabel11 = new javax.swing.JLabel();
+        BtnShx = new javax.swing.JButton();
+        BtnShy = new javax.swing.JButton();
         jMenuBar2 = new javax.swing.JMenuBar();
         jMenu3 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
@@ -130,7 +176,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         setMinimumSize(new java.awt.Dimension(800, 600));
 
         PNLDibujo.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        PNLDibujo.setLayout(new java.awt.GridLayout(1, 0));
+        PNLDibujo.setMinimumSize(new java.awt.Dimension(6, 6));
+        PNLDibujo.setName(""); // NOI18N
+        PNLDibujo.setPreferredSize(new java.awt.Dimension(6, 6));
+        PNLDibujo.setLayout(new java.awt.BorderLayout());
         jSplitPane1.setRightComponent(PNLDibujo);
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Figuras"));
@@ -176,11 +225,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jTextField1))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton1)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 89, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -311,7 +360,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton7)
-                .addContainerGap(718, Short.MAX_VALUE))
+                .addContainerGap(661, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -325,6 +374,235 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         );
 
         getContentPane().add(jPanel5, java.awt.BorderLayout.PAGE_START);
+
+        jPanel7.setLayout(new java.awt.GridLayout());
+
+        jLabel5.setText("Tx:");
+
+        jLabel6.setText("Ty:");
+
+        JtfTx.setText("0");
+        JtfTx.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JtfTxActionPerformed(evt);
+            }
+        });
+
+        JtfTy.setText("0");
+
+        BtnTraslacion.setText("Aplicar");
+        BtnTraslacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnTraslacionActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(BtnTraslacion)
+                    .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel6Layout.createSequentialGroup()
+                            .addComponent(jLabel5)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(JtfTx, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel6Layout.createSequentialGroup()
+                            .addComponent(jLabel6)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(JtfTy, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(758, Short.MAX_VALUE))
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(JtfTx, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(JtfTy, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(BtnTraslacion)
+                .addContainerGap(101, Short.MAX_VALUE))
+        );
+
+        tabEscalado.addTab("Traslacion", jPanel6);
+
+        jLabel7.setText("Sx:");
+
+        JtfSx.setText("0");
+        JtfSx.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JtfSxActionPerformed(evt);
+            }
+        });
+
+        jLabel8.setText("Sy:");
+
+        JtfSy.setText("0");
+
+        BtnEscalado.setText("Aplicar");
+        BtnEscalado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnEscaladoActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(BtnEscalado)
+                    .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel8Layout.createSequentialGroup()
+                            .addComponent(jLabel7)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(JtfSx, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel8Layout.createSequentialGroup()
+                            .addComponent(jLabel8)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(JtfSy, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(758, Short.MAX_VALUE))
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(JtfSx, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(JtfSy, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(BtnEscalado)
+                .addContainerGap(101, Short.MAX_VALUE))
+        );
+
+        tabEscalado.addTab("Escalado", jPanel8);
+
+        jLabel9.setText("Angulo:");
+
+        JtfAngulo.setText("0");
+        JtfAngulo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JtfAnguloActionPerformed(evt);
+            }
+        });
+
+        BtnAngulo.setText("Aplicar");
+        BtnAngulo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnAnguloActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
+        jPanel9.setLayout(jPanel9Layout);
+        jPanel9Layout.setHorizontalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel9)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(BtnAngulo)
+                    .addComponent(JtfAngulo, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(731, Short.MAX_VALUE))
+        );
+        jPanel9Layout.setVerticalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9)
+                    .addComponent(JtfAngulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(BtnAngulo)
+                .addContainerGap(129, Short.MAX_VALUE))
+        );
+
+        tabEscalado.addTab("Rotacion ", jPanel9);
+
+        jLabel10.setText("Shx:");
+
+        JtfShx.setText("0");
+        JtfShx.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JtfShxActionPerformed(evt);
+            }
+        });
+
+        JtfShy.setText("0");
+
+        jLabel11.setText("Shy:");
+
+        BtnShx.setText("Aplicar");
+        BtnShx.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnShxActionPerformed(evt);
+            }
+        });
+
+        BtnShy.setText("Aplicar");
+        BtnShy.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnShyActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
+        jPanel10.setLayout(jPanel10Layout);
+        jPanel10Layout.setHorizontalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel10Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel10Layout.createSequentialGroup()
+                        .addComponent(jLabel10)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(JtfShx, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(BtnShx))
+                    .addGroup(jPanel10Layout.createSequentialGroup()
+                        .addComponent(jLabel11)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(JtfShy, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(BtnShy)))
+                .addContainerGap(673, Short.MAX_VALUE))
+        );
+        jPanel10Layout.setVerticalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel10Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(JtfShx, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(BtnShx))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel11)
+                    .addComponent(JtfShy, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(BtnShy))
+                .addContainerGap(128, Short.MAX_VALUE))
+        );
+
+        tabEscalado.addTab("Sesgado", jPanel10);
+
+        jPanel7.add(tabEscalado);
+
+        getContentPane().add(jPanel7, java.awt.BorderLayout.PAGE_END);
 
         jMenu3.setText("Archivo");
 
@@ -374,16 +652,87 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
+        JOptionPane.showMessageDialog(this,
+                "Nombres:\nContreras Najera Gael\nOrtega Castro Karla Valeria\nSanchez Corona Denis\nSanvicente Alvarez Alexis Rodrigo\nMateria Graficacion",
+        "Acerca de",
+        JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        // TODO add your handling code here:
+        JFileChooser jfc = new JFileChooser(ultimo_archivo_usado);
+        
+        if(jfc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION){
+            Guardar(jfc.getSelectedFile());
+        }
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
+    public void Guardar(File archivo){
+         String datos = "";
+        
+        for (int i = 0; i < canvas1.listaFiguras.size(); i++) {
+            datos += canvas1.listaFiguras.get(i).serialiar();
+            datos += "\n";
+        }
+        
+        System.out.println(datos);
+        
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter(archivo));
+            bw.append(datos);
+            bw.close();
+            
+            prefs.put("ULTIMA_RUTA_USADA", archivo.getPath());
+            ultimo_archivo_usado = archivo;
+        } catch (IOException ex) {
+            System.err.println(ex.getMessage());
+        }
+    }
+    
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        // TODO add your handling code here:
+       JFileChooser jfc = new JFileChooser(prefs.get("ULTIMA_RUTA_USADA", ""));
+        
+        if(jfc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION){
+            Cargar(jfc.getSelectedFile());
+        } 
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
+    public void Cargar(File f){
+        try {
+            canvas1.listaFiguras.clear();
+            
+            BufferedReader br = new BufferedReader(new FileReader(f));
+            String linea;
+            
+            while((linea = br.readLine()) != null){
+                System.out.println("Linea: " + linea);
+                String[] tokens = linea.split(",");
+                
+                Figura fig = new Figura(tokens[0]);
+                
+                for (int i = 1; i < tokens.length; i+=2) {
+                    if((i+1) < tokens.length){
+                        float px = Floats.tryParse(tokens[i]);
+                        float py = Floats.tryParse(tokens[i+1]);
+
+                        Punto p = new Punto(px, py);
+                        fig.getPuntos().addElement(p);
+                    }
+                }
+                canvas1.listaFiguras.addElement(fig);
+                
+                prefs.put("ULTIMA_RUTA_USADA", f.getPath());
+                ultimo_archivo_usado = f;
+                
+                jList1.updateUI();
+                jList2.updateUI();
+            }
+        } catch (FileNotFoundException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error al cargar.",JOptionPane.ERROR_MESSAGE);
+        } catch (IOException ex) {
+            Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
        if(!jTextField1.getText().isEmpty()){
            Figura f = new Figura(jTextField1.getText());
@@ -481,6 +830,99 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
+    private void JtfTxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JtfTxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_JtfTxActionPerformed
+
+    private void JtfSxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JtfSxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_JtfSxActionPerformed
+
+    private void JtfAnguloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JtfAnguloActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_JtfAnguloActionPerformed
+
+    private void JtfShxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JtfShxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_JtfShxActionPerformed
+
+    private void BtnShyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnShyActionPerformed
+        if(figuraSelecionada != null){
+            float shy = Floats.tryParse(JtfShy.getText());
+
+            Matriz33 m = Operaciones2D.getMatrizSesgadoY(shy);
+
+            //System.out.println(m);
+            
+            figuraSelecionada.Tranformar(m);
+            jList2.updateUI();
+        }else {
+           JOptionPane.showMessageDialog(null, "Necesitas selecionar una figura");
+        }
+    }//GEN-LAST:event_BtnShyActionPerformed
+
+    private void BtnTraslacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnTraslacionActionPerformed
+        if(figuraSelecionada != null){
+            float tx = Floats.tryParse(JtfTx.getText());
+            float ty = Floats.tryParse(JtfTy.getText());
+
+            Matriz33 m = Operaciones2D.getMatrizTraslacion(tx, ty);
+
+            System.out.println(m);
+            
+            figuraSelecionada.Tranformar(m);
+            jList2.updateUI();
+        }else {
+           JOptionPane.showMessageDialog(null, "Necesitas selecionar una figura");
+        }
+    }//GEN-LAST:event_BtnTraslacionActionPerformed
+
+    private void BtnEscaladoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEscaladoActionPerformed
+        if(figuraSelecionada != null){
+            float sx = Floats.tryParse(JtfSx.getText());
+            float sy = Floats.tryParse(JtfSy.getText());
+
+            Matriz33 m = Operaciones2D.getMatrizEscalado(sx, sy);
+
+            //System.out.println(m);
+            
+            figuraSelecionada.Tranformar(m);
+            jList2.updateUI();
+        }else {
+           JOptionPane.showMessageDialog(null, "Necesitas selecionar una figura");
+        }
+    }//GEN-LAST:event_BtnEscaladoActionPerformed
+
+    private void BtnShxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnShxActionPerformed
+        if(figuraSelecionada != null){
+            float shx = Floats.tryParse(JtfShx.getText());
+
+            Matriz33 m = Operaciones2D.getMatrizSesgadoX(shx);
+
+            //System.out.println(m);
+            
+            figuraSelecionada.Tranformar(m);
+            jList2.updateUI();
+        }else {
+           JOptionPane.showMessageDialog(null, "Necesitas selecionar una figura");
+        }
+    }//GEN-LAST:event_BtnShxActionPerformed
+
+    private void BtnAnguloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAnguloActionPerformed
+        if(figuraSelecionada != null){
+            float angulo = Floats.tryParse(JtfAngulo.getText());
+            
+            Matriz33 m = Operaciones2D.getMatrizRotacion(angulo);
+
+            System.out.println(m);
+            
+            figuraSelecionada.Tranformar(m);
+            jList2.updateUI();
+        }else {
+           JOptionPane.showMessageDialog(null, "Necesitas selecionar una figura");
+        }
+    }//GEN-LAST:event_BtnAnguloActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -522,6 +964,18 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BtnAngulo;
+    private javax.swing.JButton BtnEscalado;
+    private javax.swing.JButton BtnShx;
+    private javax.swing.JButton BtnShy;
+    private javax.swing.JButton BtnTraslacion;
+    private javax.swing.JTextField JtfAngulo;
+    private javax.swing.JTextField JtfShx;
+    private javax.swing.JTextField JtfShy;
+    private javax.swing.JTextField JtfSx;
+    private javax.swing.JTextField JtfSy;
+    private javax.swing.JTextField JtfTx;
+    private javax.swing.JTextField JtfTy;
     private javax.swing.JPanel PNLDibujo;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -531,9 +985,16 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JList<Figura> jList1;
     private javax.swing.JList<Punto> jList2;
     private javax.swing.JMenu jMenu1;
@@ -547,10 +1008,15 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSplitPane jSplitPane1;
@@ -559,5 +1025,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
+    private javax.swing.JTabbedPane tabEscalado;
     // End of variables declaration//GEN-END:variables
 }

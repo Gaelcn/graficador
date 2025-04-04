@@ -57,6 +57,31 @@ public class Figura {
                 shpRenderer.rectLine(p1.getpX()*Figura.escala, p1.getpY()*Figura.escala, p2.getpX()*Figura.escala, p2.getpY()*Figura.escala,5);
             }
         } 
+        
+        if(getPuntos().size() > 2){
+            Punto p1 =getPuntos().get(getPuntos().size()-1);
+            Punto p2 =getPuntos().get(0);
+            shpRenderer.rectLine(p1.getpX()*Figura.escala, p1.getpY()*Figura.escala, p2.getpX()*Figura.escala, p2.getpY()*Figura.escala,5);
+        }
+    }
+    
+    public void Tranformar(Matriz33 m_trans){
+        for(int i = 0; i < getPuntos().size(); i++){
+            Punto p =getPuntos().get(i);
+           p.Tranformar(m_trans);
+        }
+    }
+    
+    public String serialiar(){
+        String s = getNombre() + ",";
+         for(int i = 0; i < getPuntos().size(); i++){
+            Punto p =getPuntos().get(i);
+            
+            s += p.getpX() + ",";
+            s += p.getpY() + ",";
+        }
+         
+         return s;
     }
 
     @Override
