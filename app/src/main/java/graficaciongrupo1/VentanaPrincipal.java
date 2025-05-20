@@ -6,6 +6,7 @@ package graficaciongrupo1;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglAWTCanvas;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.graphics.Color;
 import com.formdev.flatlaf.FlatDarculaLaf;
 import com.google.common.primitives.Floats;
 import java.io.BufferedReader;
@@ -18,6 +19,8 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JColorChooser;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
@@ -33,6 +36,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     
     Figura figuraSelecionada =  null;
     Punto puntoSelecionado = null;
+    
+    Figura3D figura3DSelecionada = null;
     
     Preferences prefs;
     
@@ -57,7 +62,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         config.vSyncEnabled = true;
         config.foregroundFPS = 60;
         
-        canvas1 = new PanelCanvas();
+        canvas1 = new PanelCanvas(this);
         
          //Inicializar los canvas.
         LwjglAWTCanvas panelcanvas = new LwjglAWTCanvas(canvas1, config);
@@ -91,6 +96,35 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         });
         
+        jLFiguras3D.setModel(canvas1.listaFiguras3D);
+        jLFiguras3D.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                figura3DSelecionada = jLFiguras3D.getSelectedValue();
+                if(figura3DSelecionada != null){
+                    JtfNombre.setText(figura3DSelecionada.getNombre());
+                    Jtf3Dsx.setText(""+figura3DSelecionada.getSx());
+                    Jtf3Dsy.setText(""+figura3DSelecionada.getSy());
+                    Jtf3Dsz.setText(""+figura3DSelecionada.getSz());
+                    Color c1 = figura3DSelecionada.getColor();
+                    java.awt.Color color4 = new java.awt.Color(c1.r,c1.g,c1.b,c1.a);
+                    BtnColor.setBackground(color4);
+                    JcbTipos.setSelectedItem(figura3DSelecionada.getTipo());
+                }
+                else {
+                    JtfNombre.setText("");
+                    Jtf3Dsx.setText("" + 0);
+                    Jtf3Dsy.setText("" + 0);
+                    Jtf3Dsz.setText("" + 0);
+                }
+            }
+        });
+        
+        DefaultComboBoxModel<Figura3D.TiposFigura3D> combo_model = new DefaultComboBoxModel<>();
+        JcbTipos.setModel(combo_model);
+        for (Figura3D.TiposFigura3D t : Figura3D.TiposFigura3D.values())
+            combo_model.addElement(t);
+        
         Cargar(ultimo_archivo_usado);
     }
 
@@ -106,8 +140,15 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
-        jSplitPane1 = new javax.swing.JSplitPane();
-        PNLDibujo = new javax.swing.JPanel();
+        buttonGroup1 = new javax.swing.ButtonGroup();
+        jPanel14 = new javax.swing.JPanel();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jPanel11 = new javax.swing.JPanel();
+        jPanel5 = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        jTextField4 = new javax.swing.JTextField();
+        jButton7 = new javax.swing.JButton();
+        jPanel12 = new javax.swing.JPanel();
         jSplitPane2 = new javax.swing.JSplitPane();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -129,18 +170,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
-        jPanel5 = new javax.swing.JPanel();
-        jLabel4 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
-        jButton7 = new javax.swing.JButton();
         jPanel7 = new javax.swing.JPanel();
         tabEscalado = new javax.swing.JTabbedPane();
-        jPanel6 = new javax.swing.JPanel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        JtfTx = new javax.swing.JTextField();
-        JtfTy = new javax.swing.JTextField();
-        BtnTraslacion = new javax.swing.JButton();
         jPanel8 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         JtfSx = new javax.swing.JTextField();
@@ -158,6 +189,44 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jLabel11 = new javax.swing.JLabel();
         BtnShx = new javax.swing.JButton();
         BtnShy = new javax.swing.JButton();
+        jPanel6 = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        JtfTx = new javax.swing.JTextField();
+        JtfTy = new javax.swing.JTextField();
+        BtnTraslacion = new javax.swing.JButton();
+        jPanel16 = new javax.swing.JPanel();
+        jPanel17 = new javax.swing.JPanel();
+        BtnCamArriba = new javax.swing.JButton();
+        BtnCamIzquierda = new javax.swing.JButton();
+        BtnCamAbajo = new javax.swing.JButton();
+        BtnCamDerecha = new javax.swing.JButton();
+        BtnCamFrente = new javax.swing.JButton();
+        BtnCamAtras = new javax.swing.JButton();
+        jPanel18 = new javax.swing.JPanel();
+        jSplitPane1 = new javax.swing.JSplitPane();
+        jPanel19 = new javax.swing.JPanel();
+        JtfNombre = new javax.swing.JTextField();
+        Jtf3Dsx = new javax.swing.JTextField();
+        Jtf3Dsz = new javax.swing.JTextField();
+        Jtf3Dsy = new javax.swing.JTextField();
+        JcbTipos = new javax.swing.JComboBox<>();
+        jButton8 = new javax.swing.JButton();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        jButton15 = new javax.swing.JButton();
+        jLabel17 = new javax.swing.JLabel();
+        BtnColor = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jLFiguras3D = new javax.swing.JList<>();
+        jPanel13 = new javax.swing.JPanel();
+        jPanel15 = new javax.swing.JPanel();
+        radio2D = new javax.swing.JRadioButton();
+        radio3D = new javax.swing.JRadioButton();
+        PNLDibujo = new javax.swing.JPanel();
         jMenuBar2 = new javax.swing.JMenuBar();
         jMenu3 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
@@ -175,12 +244,57 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(800, 600));
 
-        PNLDibujo.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        PNLDibujo.setMinimumSize(new java.awt.Dimension(6, 6));
-        PNLDibujo.setName(""); // NOI18N
-        PNLDibujo.setPreferredSize(new java.awt.Dimension(6, 6));
-        PNLDibujo.setLayout(new java.awt.BorderLayout());
-        jSplitPane1.setRightComponent(PNLDibujo);
+        jPanel14.setLayout(new java.awt.GridLayout(1, 0));
+
+        jPanel11.setLayout(new java.awt.BorderLayout());
+
+        jPanel5.setPreferredSize(new java.awt.Dimension(20, 35));
+
+        jLabel4.setText("Escala:");
+
+        jTextField4.setText("20");
+        jTextField4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField4ActionPerformed(evt);
+            }
+        });
+
+        jButton7.setText("Aplicar");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton7)
+                .addContainerGap(405, Short.MAX_VALUE))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton7))
+                .addContainerGap())
+        );
+
+        jPanel11.add(jPanel5, java.awt.BorderLayout.PAGE_START);
+
+        jPanel12.setLayout(new java.awt.GridLayout(1, 0));
+
+        jSplitPane2.setPreferredSize(new java.awt.Dimension(541, 350));
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Figuras"));
         jPanel3.setLayout(new java.awt.BorderLayout());
@@ -229,7 +343,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 89, Short.MAX_VALUE)))
+                        .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -304,7 +418,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTextField3)))
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -322,117 +436,19 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                     .addComponent(jButton4)
                     .addComponent(jButton5)
                     .addComponent(jButton6))
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel2.add(jPanel4, java.awt.BorderLayout.PAGE_END);
 
         jSplitPane2.setRightComponent(jPanel2);
 
-        jSplitPane1.setLeftComponent(jSplitPane2);
+        jPanel12.add(jSplitPane2);
 
-        getContentPane().add(jSplitPane1, java.awt.BorderLayout.CENTER);
+        jPanel11.add(jPanel12, java.awt.BorderLayout.CENTER);
 
-        jLabel4.setText("Escala:");
-
-        jTextField4.setText("20");
-        jTextField4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField4ActionPerformed(evt);
-            }
-        });
-
-        jButton7.setText("Aplicar");
-        jButton7.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton7ActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton7)
-                .addContainerGap(661, Short.MAX_VALUE))
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton7))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        getContentPane().add(jPanel5, java.awt.BorderLayout.PAGE_START);
-
-        jPanel7.setLayout(new java.awt.GridLayout());
-
-        jLabel5.setText("Tx:");
-
-        jLabel6.setText("Ty:");
-
-        JtfTx.setText("0");
-        JtfTx.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                JtfTxActionPerformed(evt);
-            }
-        });
-
-        JtfTy.setText("0");
-
-        BtnTraslacion.setText("Aplicar");
-        BtnTraslacion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BtnTraslacionActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
-        jPanel6.setLayout(jPanel6Layout);
-        jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(BtnTraslacion)
-                    .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel6Layout.createSequentialGroup()
-                            .addComponent(jLabel5)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(JtfTx, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(jPanel6Layout.createSequentialGroup()
-                            .addComponent(jLabel6)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(JtfTy, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(758, Short.MAX_VALUE))
-        );
-        jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(JtfTx, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(JtfTy, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(BtnTraslacion)
-                .addContainerGap(101, Short.MAX_VALUE))
-        );
-
-        tabEscalado.addTab("Traslacion", jPanel6);
+        jPanel7.setPreferredSize(new java.awt.Dimension(600, 300));
+        jPanel7.setLayout(new java.awt.GridLayout(1, 0));
 
         jLabel7.setText("Sx:");
 
@@ -471,7 +487,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                             .addComponent(jLabel8)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(JtfSy, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(758, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -486,7 +502,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                     .addComponent(JtfSy, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(BtnEscalado)
-                .addContainerGap(101, Short.MAX_VALUE))
+                .addContainerGap(180, Short.MAX_VALUE))
         );
 
         tabEscalado.addTab("Escalado", jPanel8);
@@ -518,7 +534,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(BtnAngulo)
                     .addComponent(JtfAngulo, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(731, Short.MAX_VALUE))
+                .addContainerGap(475, Short.MAX_VALUE))
         );
         jPanel9Layout.setVerticalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -529,7 +545,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                     .addComponent(JtfAngulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(BtnAngulo)
-                .addContainerGap(129, Short.MAX_VALUE))
+                .addContainerGap(208, Short.MAX_VALUE))
         );
 
         tabEscalado.addTab("Rotacion ", jPanel9);
@@ -580,7 +596,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                         .addComponent(JtfShy, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(BtnShy)))
-                .addContainerGap(673, Short.MAX_VALUE))
+                .addContainerGap(417, Short.MAX_VALUE))
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -595,14 +611,334 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                     .addComponent(jLabel11)
                     .addComponent(JtfShy, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(BtnShy))
-                .addContainerGap(128, Short.MAX_VALUE))
+                .addContainerGap(207, Short.MAX_VALUE))
         );
 
         tabEscalado.addTab("Sesgado", jPanel10);
 
+        jLabel5.setText("Tx:");
+
+        jLabel6.setText("Ty:");
+
+        JtfTx.setText("0");
+        JtfTx.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JtfTxActionPerformed(evt);
+            }
+        });
+
+        JtfTy.setText("0");
+
+        BtnTraslacion.setText("Aplicar");
+        BtnTraslacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnTraslacionActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(BtnTraslacion)
+                    .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel6Layout.createSequentialGroup()
+                            .addComponent(jLabel5)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(JtfTx, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel6Layout.createSequentialGroup()
+                            .addComponent(jLabel6)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(JtfTy, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(502, Short.MAX_VALUE))
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(JtfTx, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(JtfTy, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(BtnTraslacion)
+                .addContainerGap(180, Short.MAX_VALUE))
+        );
+
+        tabEscalado.addTab("Traslacion", jPanel6);
+
         jPanel7.add(tabEscalado);
 
-        getContentPane().add(jPanel7, java.awt.BorderLayout.PAGE_END);
+        jPanel11.add(jPanel7, java.awt.BorderLayout.PAGE_END);
+
+        jTabbedPane1.addTab("Figuras", jPanel11);
+
+        jPanel17.setBorder(javax.swing.BorderFactory.createTitledBorder("Camara"));
+
+        BtnCamArriba.setText("^");
+        BtnCamArriba.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnCamArribaActionPerformed(evt);
+            }
+        });
+
+        BtnCamIzquierda.setText("<");
+        BtnCamIzquierda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnCamIzquierdaActionPerformed(evt);
+            }
+        });
+
+        BtnCamAbajo.setText("v");
+        BtnCamAbajo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnCamAbajoActionPerformed(evt);
+            }
+        });
+
+        BtnCamDerecha.setText(">");
+        BtnCamDerecha.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnCamDerechaActionPerformed(evt);
+            }
+        });
+
+        BtnCamFrente.setText("Frente");
+
+        BtnCamAtras.setText("Atras");
+
+        javax.swing.GroupLayout jPanel17Layout = new javax.swing.GroupLayout(jPanel17);
+        jPanel17.setLayout(jPanel17Layout);
+        jPanel17Layout.setHorizontalGroup(
+            jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel17Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(BtnCamIzquierda)
+                    .addGroup(jPanel17Layout.createSequentialGroup()
+                        .addGap(29, 29, 29)
+                        .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(BtnCamAbajo)
+                            .addGroup(jPanel17Layout.createSequentialGroup()
+                                .addComponent(BtnCamArriba)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(BtnCamDerecha)
+                                .addGap(27, 27, 27)
+                                .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(BtnCamAtras)
+                                    .addComponent(BtnCamFrente))))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel17Layout.setVerticalGroup(
+            jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel17Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(BtnCamArriba)
+                    .addComponent(BtnCamFrente))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(BtnCamIzquierda)
+                    .addComponent(BtnCamDerecha))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(BtnCamAbajo)
+                    .addComponent(BtnCamAtras))
+                .addContainerGap(13, Short.MAX_VALUE))
+        );
+
+        jPanel18.setBorder(javax.swing.BorderFactory.createTitledBorder("Figuras 3D"));
+        jPanel18.setLayout(new java.awt.GridLayout());
+
+        jSplitPane1.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
+
+        jButton8.setText("Agregar");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
+
+        jLabel12.setText("Nombre");
+
+        jLabel13.setText("SX:");
+
+        jLabel14.setText("SY");
+
+        jLabel15.setText("SZ");
+
+        jLabel16.setText("Tipo");
+
+        jButton15.setText("Eliminar");
+        jButton15.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton15ActionPerformed(evt);
+            }
+        });
+
+        jLabel17.setText("Color");
+
+        BtnColor.setText("Color");
+        BtnColor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnColorActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel19Layout = new javax.swing.GroupLayout(jPanel19);
+        jPanel19.setLayout(jPanel19Layout);
+        jPanel19Layout.setHorizontalGroup(
+            jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel19Layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel12)
+                    .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel17, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(Jtf3Dsz, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Jtf3Dsx, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Jtf3Dsy, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(JtfNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(BtnColor)
+                    .addGroup(jPanel19Layout.createSequentialGroup()
+                        .addComponent(jButton15)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton8))
+                    .addComponent(JcbTipos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 367, Short.MAX_VALUE))
+        );
+        jPanel19Layout.setVerticalGroup(
+            jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel19Layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel12)
+                    .addComponent(JtfNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel13)
+                    .addComponent(Jtf3Dsx, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel14)
+                    .addComponent(Jtf3Dsy, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel15)
+                    .addComponent(Jtf3Dsz, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel17)
+                    .addComponent(BtnColor))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(JcbTipos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel16))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton8)
+                    .addComponent(jButton15)))
+        );
+
+        jSplitPane1.setBottomComponent(jPanel19);
+
+        jScrollPane3.setViewportView(jLFiguras3D);
+
+        jSplitPane1.setLeftComponent(jScrollPane3);
+
+        jPanel18.add(jSplitPane1);
+
+        javax.swing.GroupLayout jPanel16Layout = new javax.swing.GroupLayout(jPanel16);
+        jPanel16.setLayout(jPanel16Layout);
+        jPanel16Layout.setHorizontalGroup(
+            jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel16Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel16Layout.setVerticalGroup(
+            jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel16Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel18, javax.swing.GroupLayout.DEFAULT_SIZE, 659, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jTabbedPane1.addTab("3D", jPanel16);
+
+        jPanel14.add(jTabbedPane1);
+
+        jPanel13.setLayout(new java.awt.BorderLayout());
+
+        jPanel15.setPreferredSize(new java.awt.Dimension(200, 35));
+
+        buttonGroup1.add(radio2D);
+        radio2D.setSelected(true);
+        radio2D.setText("2D");
+        radio2D.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radio2DActionPerformed(evt);
+            }
+        });
+
+        buttonGroup1.add(radio3D);
+        radio3D.setText("3D");
+        radio3D.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radio3DActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel15Layout = new javax.swing.GroupLayout(jPanel15);
+        jPanel15.setLayout(jPanel15Layout);
+        jPanel15Layout.setHorizontalGroup(
+            jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel15Layout.createSequentialGroup()
+                .addGap(79, 79, 79)
+                .addComponent(radio2D)
+                .addGap(18, 18, 18)
+                .addComponent(radio3D)
+                .addContainerGap(427, Short.MAX_VALUE))
+        );
+        jPanel15Layout.setVerticalGroup(
+            jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel15Layout.createSequentialGroup()
+                .addGap(5, 5, 5)
+                .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(radio2D)
+                    .addComponent(radio3D))
+                .addContainerGap(9, Short.MAX_VALUE))
+        );
+
+        jPanel13.add(jPanel15, java.awt.BorderLayout.PAGE_START);
+
+        PNLDibujo.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        PNLDibujo.setMinimumSize(new java.awt.Dimension(6, 6));
+        PNLDibujo.setName(""); // NOI18N
+        PNLDibujo.setPreferredSize(new java.awt.Dimension(600, 800));
+        PNLDibujo.setVerifyInputWhenFocusTarget(false);
+        PNLDibujo.setLayout(new java.awt.BorderLayout());
+        jPanel13.add(PNLDibujo, java.awt.BorderLayout.PAGE_END);
+
+        jPanel14.add(jPanel13);
+
+        getContentPane().add(jPanel14, java.awt.BorderLayout.CENTER);
 
         jMenu3.setText("Archivo");
 
@@ -733,71 +1069,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         }
     }
     
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-       if(!jTextField1.getText().isEmpty()){
-           Figura f = new Figura(jTextField1.getText());
-           canvas1.listaFiguras.addElement(f);
-           jTextField1.setText("");
-       } else {
-           JOptionPane.showMessageDialog(null, "Campo nombre requerido");
-       }
-           
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-         if(puntoSelecionado != null){
-            figuraSelecionada.getPuntos().removeElement(puntoSelecionado);
-            jList2.updateUI();
-            jTextField2.setText("");
-            jTextField3.setText("");
-
-        }else {
-            JOptionPane.showMessageDialog(null, "Necesitas selecionar los puntos a eliminar");
-        }     
-    }//GEN-LAST:event_jButton6ActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        if(figuraSelecionada != null){
-            if(!jTextField1.getText().isEmpty()){
-                figuraSelecionada.setNombre(jTextField1.getText());
-                jList1.updateUI();
-                jTextField1.setText("");
-            }
-        }else {
-           JOptionPane.showMessageDialog(null, "Necesitas selecionar una figura");
-        }
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        if(figuraSelecionada != null){
-            canvas1.listaFiguras.removeElement(figuraSelecionada);
-            jList1.updateUI();
-        }else {
-           JOptionPane.showMessageDialog(null, "Necesitas selecionar una figura");
-        }
-    }//GEN-LAST:event_jButton3ActionPerformed
-
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        if(figuraSelecionada != null){
-            if(jTextField2.getText().isEmpty()){
-                JOptionPane.showMessageDialog(null, "Campo px requerido");
-            }else if(jTextField3.getText().isEmpty()){
-                JOptionPane.showMessageDialog(null, "Campo py requerido");
-            }else {
-                float px = Floats.tryParse(jTextField2.getText());
-                float py = Floats.tryParse(jTextField3.getText());
-                Punto p = new Punto(px, py);
-                
-                figuraSelecionada.getPuntos().addElement(p);
-                
-                jTextField2.setText("");
-                jTextField3.setText("");
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "Necesitas selecionar una figura");
-        }
-    }//GEN-LAST:event_jButton4ActionPerformed
-
     private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField4ActionPerformed
@@ -810,56 +1081,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton7ActionPerformed
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        if(puntoSelecionado != null){
-            float px = Floats.tryParse(jTextField2.getText());
-            float py = Floats.tryParse(jTextField3.getText());
-
-            puntoSelecionado.setpX(px);
-            puntoSelecionado.setpY(py);
-            jList2.updateUI();
-            
-            jTextField2.setText("");
-            jTextField3.setText("");
-        }else {
-            JOptionPane.showMessageDialog(null, "Necesitas selecionar los puntos a editar");
-        }
-    }//GEN-LAST:event_jButton5ActionPerformed
-
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
         dispose();
     }//GEN-LAST:event_jMenuItem4ActionPerformed
-
-    private void JtfTxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JtfTxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_JtfTxActionPerformed
-
-    private void JtfSxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JtfSxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_JtfSxActionPerformed
-
-    private void JtfAnguloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JtfAnguloActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_JtfAnguloActionPerformed
-
-    private void JtfShxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JtfShxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_JtfShxActionPerformed
-
-    private void BtnShyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnShyActionPerformed
-        if(figuraSelecionada != null){
-            float shy = Floats.tryParse(JtfShy.getText());
-
-            Matriz33 m = Operaciones2D.getMatrizSesgadoY(shy);
-
-            //System.out.println(m);
-            
-            figuraSelecionada.Tranformar(m);
-            jList2.updateUI();
-        }else {
-           JOptionPane.showMessageDialog(null, "Necesitas selecionar una figura");
-        }
-    }//GEN-LAST:event_BtnShyActionPerformed
 
     private void BtnTraslacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnTraslacionActionPerformed
         if(figuraSelecionada != null){
@@ -869,13 +1093,70 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             Matriz33 m = Operaciones2D.getMatrizTraslacion(tx, ty);
 
             System.out.println(m);
-            
+
             figuraSelecionada.Tranformar(m);
             jList2.updateUI();
         }else {
-           JOptionPane.showMessageDialog(null, "Necesitas selecionar una figura");
+            JOptionPane.showMessageDialog(null, "Necesitas selecionar una figura");
         }
     }//GEN-LAST:event_BtnTraslacionActionPerformed
+
+    private void JtfTxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JtfTxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_JtfTxActionPerformed
+
+    private void BtnShyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnShyActionPerformed
+        if(figuraSelecionada != null){
+            float shy = Floats.tryParse(JtfShy.getText());
+
+            Matriz33 m = Operaciones2D.getMatrizSesgadoY(shy);
+
+            //System.out.println(m);
+
+            figuraSelecionada.Tranformar(m);
+            jList2.updateUI();
+        }else {
+            JOptionPane.showMessageDialog(null, "Necesitas selecionar una figura");
+        }
+    }//GEN-LAST:event_BtnShyActionPerformed
+
+    private void BtnShxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnShxActionPerformed
+        if(figuraSelecionada != null){
+            float shx = Floats.tryParse(JtfShx.getText());
+
+            Matriz33 m = Operaciones2D.getMatrizSesgadoX(shx);
+
+            //System.out.println(m);
+
+            figuraSelecionada.Tranformar(m);
+            jList2.updateUI();
+        }else {
+            JOptionPane.showMessageDialog(null, "Necesitas selecionar una figura");
+        }
+    }//GEN-LAST:event_BtnShxActionPerformed
+
+    private void JtfShxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JtfShxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_JtfShxActionPerformed
+
+    private void BtnAnguloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAnguloActionPerformed
+        if(figuraSelecionada != null){
+            float angulo = Floats.tryParse(JtfAngulo.getText());
+
+            Matriz33 m = Operaciones2D.getMatrizRotacion(angulo);
+
+            System.out.println(m);
+
+            figuraSelecionada.Tranformar(m);
+            jList2.updateUI();
+        }else {
+            JOptionPane.showMessageDialog(null, "Necesitas selecionar una figura");
+        }
+    }//GEN-LAST:event_BtnAnguloActionPerformed
+
+    private void JtfAnguloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JtfAnguloActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_JtfAnguloActionPerformed
 
     private void BtnEscaladoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEscaladoActionPerformed
         if(figuraSelecionada != null){
@@ -885,43 +1166,151 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             Matriz33 m = Operaciones2D.getMatrizEscalado(sx, sy);
 
             //System.out.println(m);
-            
+
             figuraSelecionada.Tranformar(m);
             jList2.updateUI();
         }else {
-           JOptionPane.showMessageDialog(null, "Necesitas selecionar una figura");
+            JOptionPane.showMessageDialog(null, "Necesitas selecionar una figura");
         }
     }//GEN-LAST:event_BtnEscaladoActionPerformed
 
-    private void BtnShxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnShxActionPerformed
-        if(figuraSelecionada != null){
-            float shx = Floats.tryParse(JtfShx.getText());
+    private void JtfSxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JtfSxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_JtfSxActionPerformed
 
-            Matriz33 m = Operaciones2D.getMatrizSesgadoX(shx);
-
-            //System.out.println(m);
-            
-            figuraSelecionada.Tranformar(m);
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        if(puntoSelecionado != null){
+            figuraSelecionada.getPuntos().removeElement(puntoSelecionado);
             jList2.updateUI();
+            jTextField2.setText("");
+            jTextField3.setText("");
+
         }else {
-           JOptionPane.showMessageDialog(null, "Necesitas selecionar una figura");
+            JOptionPane.showMessageDialog(null, "Necesitas selecionar los puntos a eliminar");
         }
-    }//GEN-LAST:event_BtnShxActionPerformed
+    }//GEN-LAST:event_jButton6ActionPerformed
 
-    private void BtnAnguloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAnguloActionPerformed
-        if(figuraSelecionada != null){
-            float angulo = Floats.tryParse(JtfAngulo.getText());
-            
-            Matriz33 m = Operaciones2D.getMatrizRotacion(angulo);
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        if(puntoSelecionado != null){
+            float px = Floats.tryParse(jTextField2.getText());
+            float py = Floats.tryParse(jTextField3.getText());
 
-            System.out.println(m);
-            
-            figuraSelecionada.Tranformar(m);
+            puntoSelecionado.setpX(px);
+            puntoSelecionado.setpY(py);
             jList2.updateUI();
+
+            jTextField2.setText("");
+            jTextField3.setText("");
         }else {
-           JOptionPane.showMessageDialog(null, "Necesitas selecionar una figura");
+            JOptionPane.showMessageDialog(null, "Necesitas selecionar los puntos a editar");
         }
-    }//GEN-LAST:event_BtnAnguloActionPerformed
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        if(figuraSelecionada != null){
+            if(jTextField2.getText().isEmpty()){
+                JOptionPane.showMessageDialog(null, "Campo px requerido");
+            }else if(jTextField3.getText().isEmpty()){
+                JOptionPane.showMessageDialog(null, "Campo py requerido");
+            }else {
+                float px = Floats.tryParse(jTextField2.getText());
+                float py = Floats.tryParse(jTextField3.getText());
+                Punto p = new Punto(px, py);
+
+                figuraSelecionada.getPuntos().addElement(p);
+
+                jTextField2.setText("");
+                jTextField3.setText("");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Necesitas selecionar una figura");
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        if(figuraSelecionada != null){
+            canvas1.listaFiguras.removeElement(figuraSelecionada);
+            jList1.updateUI();
+        }else {
+            JOptionPane.showMessageDialog(null, "Necesitas selecionar una figura");
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        if(figuraSelecionada != null){
+            if(!jTextField1.getText().isEmpty()){
+                figuraSelecionada.setNombre(jTextField1.getText());
+                jList1.updateUI();
+                jTextField1.setText("");
+            }
+        }else {
+            JOptionPane.showMessageDialog(null, "Necesitas selecionar una figura");
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        if(!jTextField1.getText().isEmpty()){
+            Figura f = new Figura(jTextField1.getText());
+            canvas1.listaFiguras.addElement(f);
+            jTextField1.setText("");
+        } else {
+            JOptionPane.showMessageDialog(null, "Campo nombre requerido");
+        }
+
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void radio3DActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radio3DActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_radio3DActionPerformed
+
+    private void radio2DActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radio2DActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_radio2DActionPerformed
+
+    private void BtnCamArribaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnCamArribaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BtnCamArribaActionPerformed
+
+    private void BtnCamIzquierdaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnCamIzquierdaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BtnCamIzquierdaActionPerformed
+
+    private void BtnCamAbajoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnCamAbajoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BtnCamAbajoActionPerformed
+
+    private void BtnCamDerechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnCamDerechaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BtnCamDerechaActionPerformed
+
+    private void jButton15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton15ActionPerformed
+        if(figura3DSelecionada != null){
+            canvas1.listaFiguras3D.removeElement(figura3DSelecionada);
+            jLFiguras3D.updateUI();
+        }
+    }//GEN-LAST:event_jButton15ActionPerformed
+
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        String nombre = JtfNombre.getText();
+        float sx = Floats.tryParse(Jtf3Dsx.getText());
+        float sy = Floats.tryParse(Jtf3Dsy.getText());
+        float sz = Floats.tryParse(Jtf3Dsz.getText());
+        Figura3D.TiposFigura3D tipo = (Figura3D.TiposFigura3D)JcbTipos.getSelectedItem();
+        java.awt.Color c1 = BtnColor.getBackground();
+        Color color = new Color(c1.getRed(), c1.getBlue(), c1.getGreen(), c1.getAlpha());
+        
+        Figura3D nuevo = new Figura3D(nombre, sx, sy, sz, color, tipo);
+        
+        canvas1.listaFiguras3D.addElement(nuevo);
+    }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void BtnColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnColorActionPerformed
+        JColorChooser Jcc = new JColorChooser();
+        if (JOptionPane.showConfirmDialog(this, Jcc,"Seleciona un color",JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE) == 0){
+            java.awt.Color color = Jcc.getColor();
+            BtnColor.setBackground(color);
+        }
+    }//GEN-LAST:event_BtnColorActionPerformed
 
     /**
      * @param args the command line arguments
@@ -965,28 +1354,50 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnAngulo;
+    public javax.swing.JButton BtnCamAbajo;
+    public javax.swing.JButton BtnCamArriba;
+    public javax.swing.JButton BtnCamAtras;
+    public javax.swing.JButton BtnCamDerecha;
+    public javax.swing.JButton BtnCamFrente;
+    public javax.swing.JButton BtnCamIzquierda;
+    private javax.swing.JButton BtnColor;
     private javax.swing.JButton BtnEscalado;
     private javax.swing.JButton BtnShx;
     private javax.swing.JButton BtnShy;
     private javax.swing.JButton BtnTraslacion;
+    private javax.swing.JComboBox<Figura3D.TiposFigura3D> JcbTipos;
+    private javax.swing.JTextField Jtf3Dsx;
+    private javax.swing.JTextField Jtf3Dsy;
+    private javax.swing.JTextField Jtf3Dsz;
     private javax.swing.JTextField JtfAngulo;
+    private javax.swing.JTextField JtfNombre;
     private javax.swing.JTextField JtfShx;
     private javax.swing.JTextField JtfShy;
     private javax.swing.JTextField JtfSx;
     private javax.swing.JTextField JtfSy;
     private javax.swing.JTextField JtfTx;
     private javax.swing.JTextField JtfTy;
-    private javax.swing.JPanel PNLDibujo;
+    public javax.swing.JPanel PNLDibujo;
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton15;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton8;
+    private javax.swing.JList<Figura3D> jLFiguras3D;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1009,6 +1420,15 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel11;
+    private javax.swing.JPanel jPanel12;
+    private javax.swing.JPanel jPanel13;
+    private javax.swing.JPanel jPanel14;
+    private javax.swing.JPanel jPanel15;
+    private javax.swing.JPanel jPanel16;
+    private javax.swing.JPanel jPanel17;
+    private javax.swing.JPanel jPanel18;
+    private javax.swing.JPanel jPanel19;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -1019,12 +1439,16 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JSplitPane jSplitPane2;
+    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
+    public javax.swing.JRadioButton radio2D;
+    public javax.swing.JRadioButton radio3D;
     private javax.swing.JTabbedPane tabEscalado;
     // End of variables declaration//GEN-END:variables
 }
